@@ -1,3 +1,5 @@
+## Grabs the client's IP address and displays it in a simple web page. Useful for testing network setups or just showing off your local IP!
+
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import socket
 

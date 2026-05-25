@@ -1,3 +1,5 @@
+## Practice, opens CMD and runs some commands, including arithmetic operations using set /a. Useful for learning how to automate command line tasks and perform calculations directly in the terminal!
+
 import subprocess
 import os
 
