@@ -1,0 +1,55 @@
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import socket
+
+class IPHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        # Get the client's IP from the connection
+        client_ip = self.client_address[0]
+        
+        # Build a nice HTML response
+        html = f"""
+        <html>
+            <head><title>Your IP</title></head>
+            <body style="font-family: sans-serif; text-align: center; margin-top: 100px;">
+                <h1>Your IP address is:</h1>
+                <h2 style="color: #2c7;">{client_ip}</h2>
+                <p>User-Agent: {self.headers.get('User-Agent')}</p>
+            </body>
+        </html>
+        """
+        
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+        self.wfile.write(html.encode())
+    
+    def log_message(self, format, *args):
+        # Pretty log to console so you can see visitors
+        print(f"Visitor: {self.client_address[0]} -> {format % args}")
+
+
+def get_local_ip():
+    """Find this machine's IP on the local network."""
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("8.8.8.8", 80))  # doesn't actually send anything
+        ip = s.getsockname()[0]
+    finally:
+        s.close()
+    return ip
+
+
+if __name__ == "__main__":
+    PORT = 8080
+    local_ip = get_local_ip()
+    
+    print(f"Server starting on port {PORT}")
+    print(f"Local access:    http://localhost:{PORT}")
+    print(f"Network access:  http://{local_ip}:{PORT}")
+    print("Press Ctrl+C to stop\n")
+    
+    server = HTTPServer(('0.0.0.0', PORT), IPHandler)
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("\nServer stopped.")
