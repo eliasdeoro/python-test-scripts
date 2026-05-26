@@ -10,18 +10,13 @@ $RightMonHeight = 1440
 $RightMonX      = 0
 $RightMonY      = 0
 
-# --- App paths / commands ---
-# Claude desktop app. If the default below isn't right, right-click your
-# Start-menu Claude shortcut -> Open file location to find the real path.
+
 $ClaudeAppPath = "$env:LOCALAPPDATA\AnthropicClaude\claude.exe"
 
 $GitBashPath = "C:\Program Files\Git\git-bash.exe"
 $VSCodePath  = "$env:LOCALAPPDATA\Programs\Microsoft VS Code\Code.exe"
 
-# --- Sizing ---
 $ClaudeCoveragePct = 0.78        # ~78% of the left monitor
-# =====================================================================
-
 
 # ---- Win32 API for moving windows ----
 Add-Type @"
@@ -49,7 +44,6 @@ public class Win32 {
 }
 "@
 
-# Wait until a process exposes a real main window, then return its handle.
 function Wait-MainWindow {
     param([System.Diagnostics.Process]$Process, [int]$TimeoutSec = 20)
     $deadline = (Get-Date).AddSeconds($TimeoutSec)
